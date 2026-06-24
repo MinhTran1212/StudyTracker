@@ -1,12 +1,18 @@
 import express from 'express';
+import mongoose from 'mongoose';
+import { Subject } from './models/Subject';
+import subjectRoutes from './routes/subjectRoutes'; 
+import { connectDB } from './db';
+import dotenv from 'dotenv';
 
 const app = express();
-const port = 3000;
+app.use(express.json());
+const PORT = process.env.PORT || 3000;
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
+dotenv.config({ path: "./.env" });
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+connectDB();
+
+app.listen(PORT, () => {
+    console.log(`Server runnning on path http://localhost:${PORT}`);
 });
