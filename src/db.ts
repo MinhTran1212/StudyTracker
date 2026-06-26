@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 export async function connectDB(){
     try {
         await mongoose.connect(process.env.MONGODB_URL!);
-        console.log(`Successfully connected to mongodb`);
+        console.log(`Successfully connected to MongoDB Atlas`);
     } catch (error){
         console.log(`Failed to process db`);
         console.error(error);
