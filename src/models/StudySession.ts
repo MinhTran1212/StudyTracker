@@ -1,38 +1,29 @@
 import { Schema, model, Document } from 'mongoose';
 
 export interface IStudySession extends Document {
-    userId: Schema.Types.ObjectId;
-    subjectId: Schema.Types.ObjectId;
-    topicName: string,
+    subjectId: Schema.Types.ObjectId,
     duration: number,
-    date: Date
+    notes: string,
+    createdAt: Date;
 }
 
-const StudySessionSchema = new Schema<IStudySession>(
-    {
-        userId: {
-            type: Schema.Types.ObjectId,
-            ref: 'User',
-            required: true
-        },
-        subjectId: {
-            type: Schema.Types.ObjectId,
-            ref: 'Subject',
-            required: true
-        },
-        topicName: {
-            type: String,
-            required: true
-        },
-        duration: {
-            type: Number,
-            required: true
-        },
-        date: {
-            type: Date,
-            default: Date.now
-        }
+const StudySessionSchema = new Schema<IStudySession>({
+    subjectId: {
+        type: Schema.Types.ObjectId,
+        required: true,
+        ref: 'Subject'
     },
-{ timestamps: true});
+    duration: {
+        type: Number,
+        required: true
+    },
+    notes: {
+        type: String
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
+});
 
 export const StudySession = model<IStudySession>('StudySession', StudySessionSchema);
