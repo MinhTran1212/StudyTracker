@@ -58,29 +58,7 @@ router.get('/stats', requireAuth, async (req: AuthRequest, res) => {
                     averageSessionDuration: { $avg: "$duration" }
                 }
             },
-            {
-                $lookup: {
-                    from: "subjects",          // The name of the collection in MongoDB (usually lowercase plural)
-                    localField: "_id",         // The subjectId we grouped by in Stage 2
-                    foreignField: "_id",       // The _id field inside the subjects collection
-                    as: "subjectDetails"       // The name of the temporary array to store the match
-                }
-            },
-            // Stage 4: Flatten the subjectDetails array since lookup returns an array
-            {
-                $unwind: "$subjectDetails"
-            },
-            // Stage 5: Clean up the final output structure
-            {
-                $project: {
-                    _id: 0, // Hide the raw subjectId object
-                    subjectId: "$subjectDetails._id",
-                    subjectName: "$subjectDetails.name",
-                    subjectColor: "$subjectDetails.color",
-                    totalMinutes: 1,
-                    sessionCount: 1
-                }
-            }
+            
         ]);
 
         if (stats.length == 0){
