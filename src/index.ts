@@ -4,6 +4,8 @@ import studySessionRoutes from './routes/studySessionRoutes';
 import authRoutes from './routes/authRoutes';
 import { connectDB } from './db';
 import dotenv from 'dotenv';
+import cors from 'cors';
+
 
 dotenv.config({ path: "./.env" });
 
@@ -18,6 +20,7 @@ app.get('/', (req, res) => {
 app.use('/subjects', subjectRoutes);
 app.use('/studysessions', studySessionRoutes);
 app.use('/register', authRoutes);
+app.use(cors());
 
 
 app.listen(PORT, () => {
