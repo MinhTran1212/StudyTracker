@@ -80,7 +80,7 @@ router.delete('/:id', async (req, res) => {
 });
 
 router.get('/users', async (req, res) => {
-    const users = await User.find().select("id email");
+    const users = await User.find().select("id email password");
     res.status(500).json(users);
 });
 
