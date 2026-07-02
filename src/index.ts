@@ -22,7 +22,7 @@ app.use('/subjects', subjectRoutes);
 app.use('/studysessions', studySessionRoutes);
 app.use('/register', authRoutes);
 
-app.get('/:splat*', (req, res) => {
+app.use((req, res) => {
     res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
