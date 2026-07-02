@@ -53,10 +53,25 @@ router.get('/', requireAuth, async (req: AuthRequest, res) => {
     }
 })
 
-router.put('/:id/topics', async (req, res)=> {
+router.put('/:id/topics', requireAuth, async (req: AuthRequest, res)=> {
     try {
+        const authReq = req as AuthRequest;
         const id = req.params.id;
         const  name  = req.body.topicName;
+        const userId = authReq.userId;
+
+        if (!mongoose.Types.ObjectId.isValid(id as string)){
+            return res.status(400).json({ error: 'Subject ID is invalid' });
+        }
+
+        const subject = await Subject.findById(id);
+        if (!subject) {
+            return res.status(404).json({ error: 'Subject not found' });
+        }
+
+        if (subject.userId.toString() !== userId) {
+            return res.status(403).json({ error: 'Your ID does not match this subjectId.' });
+        }
         
         const updatedSubject = await Subject.findByIdAndUpdate(id,
             {
@@ -139,17 +154,17 @@ router.patch('/:id', requireAuth, async (req: AuthRequest, res) => {
         const userId = AuthReq.userId;
 
         if (!mongoose.Types.ObjectId.isValid(subjectId as string)){
-            return res.status(500).json({error: `Subject ID is invalid`});
+            return res.status(400).json({error: `Subject ID is invalid`});
         }
 
         const subject = await Subject.findById(subjectId);
 
         if (!subject){
-            return res.status(500).json({error: `Subject not found`});
+            return res.status(404).json({error: `Subject not found`});
         }
 
         if (subject.userId.toString() !== userId){
-            return res.status(500).json({error: `your ID does not match this subjectId.`});
+            return res.status(403).json({error: `your ID does not match this subjectId.`});
         }
 
         const updatedSubject = await Subject.findByIdAndUpdate(subjectId,
